@@ -40,7 +40,12 @@
             <div class="col-md-12 col-xs-12 col-lg-12 section-title">
                 <h3 class="titleSect">Favorite Movies</h3>
             </div>
-            <movieFav v-for="movie of Movies" v-bind:key="movie.id" v-bind:movie="movie" />
+            <movieFav 
+                v-for="movie of Movies" 
+                v-bind:key="movie.id" 
+                v-bind:movie="movie" 
+                @showinfo="handleShowMovie"
+            />
         </div>
         <!-- movies -->
     </div>
@@ -104,8 +109,11 @@
         </div>
     </div>
     <!-- movie single-->
+    <movie-info 
+        :show="show" 
+        @close="handleCloseMovieInfo" 
+        @showinfo="handleShowMovie"/> 
 </template>
-
 <script>
  import axios from 'axios';
 
@@ -113,14 +121,15 @@
  import tvFav from './components/TvComponent';
  import moviePopular from './components/PopularMovie';
  import tvPopular from './components/PopularTv';
-
+import movieInfo from './components/MovieInfo.vue';
     export default {
         name: 'App',
         components:{
             movieFav,
             moviePopular,
             tvFav,
-            tvPopular
+            tvPopular,
+            movieInfo
         },
         data: function () {
             return {
@@ -128,11 +137,19 @@
                 Series: [],
                 PopularSeries: [],
                 PopularMovies: [],
+                show: false,
                 // favouriteMovies: [],
                 // movieId: null
             }
         },
         methods: {
+            handleShowMovie () {
+                this.show = true;
+                console.log(this.show);
+            },
+            handleCloseMovieInfo () {
+                this.show = false;
+            },
             // rated movie
             fetch() {
                 let result = axios.get('https://api.themoviedb.org/3/movie/top_rated?api_key=8ece54d7e3d5be09c1eb2794cc730ab4&language=en-US&page=1')
