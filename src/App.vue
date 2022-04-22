@@ -96,7 +96,7 @@
         </div>
     </div>
     <!-- popular section 2-->
-    <movie-info :show="show" @close="handleCloseMovieInfo" @showinfo="handleShowMovie"/> 
+    <movie-info :movie = "movieSelected" :show="show" @close="handleCloseMovieInfo" @showinfo="handleShowMovie"/> 
 </template>
 
 <script>
@@ -124,19 +124,13 @@
                 PopularSeries: [],
                 PopularMovies: [],
                 show: false,
-                currentMovie: {}
+                movieSelected:{},
             }
         },
         methods: {
-            handleShowMovie (id) {
-                this.show = true 
-                this.fetchM(id)
-                console.log(this.show);
-            },
-            async fetchM(id){
-                let result = await axios.get(`https://api.themoviedb.org/3/movie/${id}/recommendations?api_key=8ece54d7e3d5be09c1eb2794cc730ab4&language=en-US&page=1`)
-                this.currentMovie = result.data
-                // this.show = true   
+            handleShowMovie (movie) {
+                this.show = true;
+                this.movieSelected = movie;
             },
             handleCloseMovieInfo () {
                 this.show = false;

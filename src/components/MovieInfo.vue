@@ -4,15 +4,15 @@
       <div class="modal-wrapper">
         <div class="modal-container">
           <div class="modal-header">
-            <h3 class="titleM">{{currentMovie.name}}</h3>
+            <h3 class="titleM">{{movie.title}}</h3>
           </div>
 
           <div class="modal-body">
-            <p class="desc">{{currentMovie.overview}}</p>
+            <p class="desc">{{movie.overview}}</p>
           </div>
 
           <div class="modal-footer">
-              <button class="btn btn-lg btn-block btn-primary " @click="$emit('close')">Cerrar</button>
+              <button class="btn btn-s btn-sm" @click="$emit('close')">Cerrar</button>
           </div>
         </div>
       </div>
@@ -22,10 +22,9 @@
 
 <script>
 export default {
-  props:  {
-    
-    show: {},
-    currentMovie:{}
+  props:{
+    show:{},
+    movie:{}
   },
 };
 </script>
