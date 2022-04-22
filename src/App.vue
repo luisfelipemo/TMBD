@@ -40,7 +40,7 @@
             <div class="col-md-12 col-xs-12 col-lg-12 section-title">
                 <h3 class="titleSect">Favorite Movies</h3>
             </div>
-            <movieFav v-for="movie of Movies" v-bind:key="movie.id" v-bind:movie="movie" />
+                <movieFav v-for="movie of Movies" v-bind:key="movie.id" v-bind:movie="movie" @showinfo="handleShowMovie" />
         </div>
         <!-- movies -->
     </div>
@@ -96,14 +96,7 @@
         </div>
     </div>
     <!-- popular section 2-->
-    <!-- movie single-->
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-3"></div>
-            <div class="col-md-9"></div>
-        </div>
-    </div>
-    <!-- movie single-->
+    <movie-info :show="show" @close="handleCloseMovieInfo" @showinfo="handleShowMovie"/> 
 </template>
 
 <script>
@@ -113,6 +106,7 @@
  import tvFav from './components/TvComponent';
  import moviePopular from './components/PopularMovie';
  import tvPopular from './components/PopularTv';
+ import movieInfo from './components/MovieInfo.vue';
 
     export default {
         name: 'App',
@@ -120,7 +114,8 @@
             movieFav,
             moviePopular,
             tvFav,
-            tvPopular
+            tvPopular,
+            movieInfo
         },
         data: function () {
             return {
@@ -128,11 +123,24 @@
                 Series: [],
                 PopularSeries: [],
                 PopularMovies: [],
-                // favouriteMovies: [],
-                // movieId: null
+                show: false,
+                currentMovie: {}
             }
         },
         methods: {
+            handleShowMovie (id) {
+                this.show = true 
+                this.fetchM(id)
+                console.log(this.show);
+            },
+            async fetchM(id){
+                let result = await axios.get(`https://api.themoviedb.org/3/movie/${id}/recommendations?api_key=8ece54d7e3d5be09c1eb2794cc730ab4&language=en-US&page=1`)
+                this.currentMovie = result.data
+                // this.show = true   
+            },
+            handleCloseMovieInfo () {
+                this.show = false;
+            },
             // rated movie
             fetch() {
                 let result = axios.get('https://api.themoviedb.org/3/movie/top_rated?api_key=8ece54d7e3d5be09c1eb2794cc730ab4&language=en-US&page=1')
@@ -180,26 +188,13 @@
                         console.log(err);
                     });
                 return result;
-            },
-            // favouriteMovie
-            // fetchMoviesFavourite(id){
-            // let result = axios.get(`https://api.themoviedb.org/3/movie/${id}/recommendations?api_key=8ece54d7e3d5be09c1eb2794cc730ab4&language=en-US&page=1`)
-            //         .then((res) => {
-            //             this.movieId = res.data.results;
-            //             console.log(res.data.results);
-            //         })
-            //         .catch(err => {
-            //             console.log(err);
-            //         });
-            //     return result;
-            // }        
+            },     
         },
         mounted(){
             this.fetch(),
             this.fetchSeriesPopular(),
             this.fetchSerie(),
             this.fetchMoviesPopular()
-            // this.fetchMoviesFavourite()
         }
     };
 </script>

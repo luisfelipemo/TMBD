@@ -1,5 +1,5 @@
 <template>
-    <div class="col-md-3 col-xs-4 col-lg-3 movie-bg" v-bind:key="movie.id" >
+    <div  @click="handleShowInfo" class="col-md-3 col-xs-4 col-lg-3 movie-bg" v-bind:key="movie.id" >
         <figure>
             <img v-bind:src="`https://image.tmdb.org/t/p/original${movie.backdrop_path}`" alt="">
         </figure>
@@ -16,6 +16,11 @@
 
 <script>
 export default({
-      props: ['movie']
+      props: ['movie'],
+      methods: {
+          handleShowInfo () {
+            this.$emit('showinfo', this.movie)
+          },
+      },
 });
 </script>
